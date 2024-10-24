@@ -7,14 +7,15 @@
         public Guid TemplateID { get; private set; }
         public Guid CandidateId { get; private set; }
         public Guid InvitingEID { get; private set; }
-        public Guid ID { get; }
         public IReadOnlyCollection<WorkflowStep> Steps { get; }
         public DateTime CreateAt { get; }
 
         private Workflow(Guid id, IReadOnlyCollection<WorkflowStep> steps, DateTime createAt)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
-            ID = id;
+            ArgumentException.ThrowIfNullOrEmpty(nameof(steps));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(createAt));
+            TemplateID = id;
             Steps = steps;
             CreateAt = createAt;
         }
@@ -22,7 +23,7 @@
         public static Workflow Create(WorkflowTemplate template)
         {
             ArgumentNullException.ThrowIfNull(nameof(template));
-            return new(Guid.NewGuid(), template.Steps.Select(x => WorkflowStep.Create(x)), DateTime.UtcNow);
+            return new Workflow(Guid.NewGuid(), template.Steps.Select(x => WorkflowStep.Create(x)), DateTime.UtcNow);
         }
 
         public void Approve(Employers user, string message)

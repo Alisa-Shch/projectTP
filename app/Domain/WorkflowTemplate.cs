@@ -5,7 +5,7 @@
         public string Name { get; }
         public string Description { get; }
         public Guid ID { get; }
-        public IReadOnlyCollection<WorkflowStep> Steps { get; }
+        public IReadOnlyCollection<WorkflowStep> Steps { get; }        
 
         private WorkflowTemplate(string name, string description)
         {
@@ -16,7 +16,7 @@
 
         public Workflow Create(Guid candidateId, Guid invitingEID)
         {
-            return null;
+            return Workflow.Create(new WorkflowTemplate(Name, Description));
         }
 
         public void Update()
