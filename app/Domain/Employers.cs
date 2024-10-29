@@ -10,6 +10,7 @@
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
             ID = id;
             RoleID = roleId;
             Name = name;

@@ -8,6 +8,7 @@
         private Role(Guid nameID, string roleName)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(nameID));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(roleName));
             NameID = nameID;
             RoleName = roleName;
         }

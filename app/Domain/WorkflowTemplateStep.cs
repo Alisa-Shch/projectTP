@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace Domain
+﻿namespace Domain
 {
     internal class WorkflowTemplateStep
     {
@@ -11,6 +9,10 @@ namespace Domain
 
         private WorkflowTemplateStep(string name, string description, Guid employeeID, Guid roleID)
         {
+            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(description));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(employeeID));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(roleID));
             Name = name;
             Description = description;
             EmployeeID = employeeID;

@@ -2,7 +2,6 @@
 {
     internal class Company
     {
-        //public Guid CID { get; }
         public string Name { get; }
     
         private Company(string name)

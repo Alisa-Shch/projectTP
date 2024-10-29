@@ -1,4 +1,6 @@
-﻿namespace Domain
+﻿using System.Xml.Linq;
+
+namespace Domain
 {
     internal class WorkflowTemplate
     {
@@ -7,25 +9,31 @@
         public Guid ID { get; }
         public IReadOnlyCollection<WorkflowStep> Steps { get; }        
 
-        private WorkflowTemplate(string name, string description)
+        private WorkflowTemplate(string name, string description, Guid id, IReadOnlyCollection<WorkflowStep> steps)
         {
+            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(description));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(id));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(steps));
             Name = name;
             Description = description;
-            ID = Guid.NewGuid();
+            ID = id;
+            Steps = steps.ToList().AsReadOnly();
+        }
+
+        public WorkflowTemplate Create(string name, string description, IReadOnlyCollection<WorkflowStep> steps)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(description));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(steps));
+            return new WorkflowTemplate(name, description, Guid.NewGuid(), steps);
         }
 
         public Workflow Create(Guid candidateId, Guid invitingEID)
         {
-            return Workflow.Create(new WorkflowTemplate(Name, Description));
-        }
-
-        public void Update()
-        {
-            /*
-            Steps.ModifiedDate = DateTime.Now;
-            bool isRejectSteps = Steps.Where(x => x.Status == Status.Rejected).Any();
-            Steps.Status = isRejectSteps ? Status.Rejected : Status.InProgress;
-            */
+            ArgumentException.ThrowIfNullOrEmpty(nameof(candidateId));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(invitingEID));
+            return Workflow.Create(this, candidateId, invitingEID);
         }
     }
 }
