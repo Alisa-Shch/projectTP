@@ -5,8 +5,8 @@
         public Status Status { get; private set; }
         public string? Message { get; private set; }
         public string Description { get; private set; }
-        public Guid RoleID { get; }
-        public Guid EmployeeID { get; }
+        public Guid RoleId { get; }
+        public Guid EmployeeId { get; }
         public DateTime ModifiedDate { get; private set; }
         public int NumberStep { get; }
 
@@ -17,16 +17,19 @@
             ArgumentException.ThrowIfNullOrEmpty(nameof(employeeId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(modifiedDate));
             ArgumentException.ThrowIfNullOrEmpty(nameof(numberStep));
+
             Status = Status.InProgress;
             Description = description;
-            RoleID = roleId;
-            EmployeeID = employeeId;
+            RoleId = roleId;
+            EmployeeId = employeeId;
             ModifiedDate = modifiedDate;
             NumberStep = numberStep;
         }
 
         public static WorkflowStep Create(WorkflowStep templateStep)
         {
+            ArgumentException.ThrowIfNullOrEmpty(nameof(templateStep));
+
             return new WorkflowStep(templateStep.Description, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, 1);
         }
 
@@ -34,10 +37,8 @@
         {
             ArgumentNullException.ThrowIfNull(nameof(user));
             ArgumentException.ThrowIfNullOrEmpty(nameof(message));
-            if ((user.ID != EmployeeID && user.RoleID != RoleID) || Status != Status.InProgress)
-            {
-                throw new Exception("User cannot approve this step.");
-            }
+
+            CheckUser(user);
             Status = Status.Approved;
             Message = message;
             ModifiedDate = DateTime.UtcNow;
@@ -47,10 +48,8 @@
         {
             ArgumentNullException.ThrowIfNull(nameof(user));
             ArgumentException.ThrowIfNullOrEmpty(nameof(message));
-            if ((user.ID != EmployeeID && user.RoleID != RoleID) || Status != Status.InProgress)
-            {
-                throw new Exception("User cannot reject this step.");
-            }
+
+            CheckUser(user);
             Status = Status.Rejected;
             Message = message;
             ModifiedDate = DateTime.UtcNow;
@@ -61,6 +60,14 @@
             Status = Status.InProgress;
             Message = null;
             ModifiedDate = DateTime.UtcNow;
+        }
+
+        public void CheckUser(Employers user)
+        {
+            if ((user.Id != EmployeeId && user.RoleID != RoleId) || Status != Status.InProgress)
+            {
+                throw new Exception("");
+            }
         }
     }
 }

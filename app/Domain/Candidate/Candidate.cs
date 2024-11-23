@@ -2,11 +2,17 @@
 {
     internal class Candidate
     {
+        public Guid Id { get; }
         public string Name { get; }
         public string Mail { get; }
     
-        private Candidate(string name, string mail)
+        private Candidate(Guid id, string name, string mail)
         {
+            ArgumentException.ThrowIfNullOrEmpty(nameof(id));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(mail));
+
+            Id = id;
             Name = name;
             Mail = mail;
         }
@@ -15,7 +21,8 @@
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(nameof(mail));
-            return new(name, mail);
+
+            return new(Guid.NewGuid(), name, mail);
         }
     }
 }

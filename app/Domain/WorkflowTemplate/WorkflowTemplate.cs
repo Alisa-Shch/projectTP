@@ -1,23 +1,22 @@
-﻿using System.Xml.Linq;
-
-namespace Domain
+﻿namespace Domain
 {
     internal class WorkflowTemplate
     {
+        public Guid Id { get; }
         public string Name { get; }
         public string Description { get; }
-        public Guid ID { get; }
         public IReadOnlyCollection<WorkflowStep> Steps { get; }        
 
-        private WorkflowTemplate(string name, string description, Guid id, IReadOnlyCollection<WorkflowStep> steps)
+        private WorkflowTemplate(Guid id, string name, string description,IReadOnlyCollection<WorkflowStep> steps)
         {
+            ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(nameof(description));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(steps));
+
+            Id = id;
             Name = name;
             Description = description;
-            ID = id;
             Steps = steps.ToList().AsReadOnly();
         }
 
@@ -26,14 +25,16 @@ namespace Domain
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(nameof(description));
             ArgumentException.ThrowIfNullOrEmpty(nameof(steps));
-            return new WorkflowTemplate(name, description, Guid.NewGuid(), steps);
+
+            return new WorkflowTemplate(Guid.NewGuid(), name, description,steps);
         }
 
-        public Workflow Create(Guid candidateId, Guid invitingEID)
+        public Workflow Create(Guid candidateId, Guid invitingId)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(candidateId));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(invitingEID));
-            return Workflow.Create(this, candidateId, invitingEID);
+            ArgumentException.ThrowIfNullOrEmpty(nameof(invitingId));
+
+            return Workflow.Create(this, candidateId, invitingId);
         }
     }
 }

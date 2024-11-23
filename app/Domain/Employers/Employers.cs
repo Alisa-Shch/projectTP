@@ -2,7 +2,7 @@
 {
     internal class Employers
     {
-        public Guid ID { get; }
+        public Guid Id { get; }
         public Guid RoleID { get; }
         public string Name { get; }
     
@@ -11,15 +11,18 @@
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
-            ID = id;
+
+            Id = id;
             RoleID = roleId;
             Name = name;
         }
 
-        public static Employers Create(string name)
+        public static Employers Create(Guid roleId, string name)
         {
+            ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
-            return new(Guid.NewGuid(), Guid.NewGuid(), name);
+
+            return new(Guid.NewGuid(), roleId, name);
         }
     }
 }
