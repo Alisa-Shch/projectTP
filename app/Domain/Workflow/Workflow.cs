@@ -1,6 +1,6 @@
 ﻿namespace Domain
 {
-    internal class Workflow
+    public class Workflow
     {
         public Guid Id { get; }
         public string Name { get; private set; }

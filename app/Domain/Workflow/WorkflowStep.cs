@@ -64,7 +64,7 @@
 
         public void CheckUser(Employers user)
         {
-            if ((user.Id != EmployeeId && user.RoleID != RoleId) || Status != Status.InProgress)
+            if ((user.Id != EmployeeId && user.RoleId != RoleId) || Status != Status.InProgress)
             {
                 throw new Exception("");
             }

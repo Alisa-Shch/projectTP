@@ -3,22 +3,22 @@
     internal class Role
     {
         public Guid Id { get; }
-        public string RoleName { get; }
+        public string Name { get; }
 
-        private Role(Guid id,string roleName)
+        private Role(Guid id,string name)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(roleName));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
 
             Id = id;
-            RoleName = roleName;
+            Name = name;
         }
 
-        public static Role Create(string roleName)
+        public static Role Create(string name)
         {
-            ArgumentException.ThrowIfNullOrEmpty(nameof(roleName));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
 
-            return new(Guid.NewGuid(), roleName);
+            return new(Guid.NewGuid(), name);
         }
     }
 }
