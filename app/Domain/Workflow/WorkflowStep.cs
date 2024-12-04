@@ -1,6 +1,6 @@
 ﻿namespace Domain
 {
-    internal class WorkflowStep
+    public class WorkflowStep
     {
         public Status Status { get; private set; }
         public string? Message { get; private set; }
@@ -66,7 +66,7 @@
         {
             if ((user.Id != EmployeeId && user.RoleId != RoleId) || Status != Status.InProgress)
             {
-                throw new Exception("");
+                throw new Exception("что это?");
             }
         }
     }

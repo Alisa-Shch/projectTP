@@ -1,6 +1,6 @@
 ﻿namespace Domain
 {
-    internal class Company
+    public class Company
     {
         public Guid Id { get; }
         public string Name { get; }

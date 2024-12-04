@@ -1,6 +1,6 @@
 ﻿namespace Domain
 {
-    internal class Employers
+    public class Employers
     {
         public Guid Id { get; }
         public Guid RoleId { get; }

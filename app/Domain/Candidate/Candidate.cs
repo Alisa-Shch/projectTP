@@ -1,8 +1,12 @@
-﻿namespace Domain
+﻿using Microsoft.Azure.Documents;
+
+namespace Domain
 {
-    internal class Candidate
+    public class Candidate
     {
         public Guid Id { get; }
+        public Guid VacancyId { get; }
+        public User? ReferralId { get; }
         public string Name { get; }
         public string Mail { get; }
     

@@ -44,7 +44,7 @@
 
             if (Steps.All(x => x.Status == Status.Approved) || Steps.Any(x => x.Status == Status.Rejected))
             {
-                throw new Exception("");
+                throw new Exception("что это?");
             }
             var step = Steps.OrderBy(x => x.NumberStep).First(x => x.Status == Status.InProgress);
             step.Approve(user, message);
@@ -73,7 +73,7 @@
         {
             if (Steps.All(x => x.Status == Status.Approved) || Steps.Any(x => x.Status == Status.Rejected))
             {
-                throw new Exception("");
+                throw new Exception("что это?");
             }
         }
     }

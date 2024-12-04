@@ -1,6 +1,6 @@
 ﻿namespace Domain
 {
-    internal class WorkflowTemplate
+    public class WorkflowTemplate
     {
         public Guid Id { get; }
         public string Name { get; }
@@ -26,7 +26,7 @@
             ArgumentException.ThrowIfNullOrEmpty(nameof(description));
             ArgumentException.ThrowIfNullOrEmpty(nameof(steps));
 
-            return new WorkflowTemplate(Guid.NewGuid(), name, description,steps);
+            return new WorkflowTemplate(Guid.NewGuid(), name, description, steps);
         }
 
         public Workflow Create(Guid candidateId, Guid invitingId)
