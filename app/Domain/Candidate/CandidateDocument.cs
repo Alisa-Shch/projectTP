@@ -1,6 +1,6 @@
 ﻿namespace Domain
 {
-    internal class CandidateDocument
+    public class CandidateDocument
     {
         public string Name { get; }
         public string WorkExperience { get; }
