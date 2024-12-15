@@ -1,12 +1,9 @@
-﻿using AutoFixture;
-using NUnit.Framework;
-
-namespace Domain.Tests
+﻿namespace Domain.Tests
 {
     [TestFixture]
     public class CandidateTest
     {
-        private Fixture _fixture;
+        private Fixture? _fixture;
 
         [SetUp]
         public void Setup()
@@ -19,7 +16,6 @@ namespace Domain.Tests
         {
             var name = _fixture.Create<string>();
             var mail = _fixture.Create<string>();
-
             var candidate = Candidate.Create(name, mail);
 
             candidate.Should().NotBeNull();
@@ -33,7 +29,7 @@ namespace Domain.Tests
         {
             var mail = _fixture.Create<string>();
 
-            Action act = () => Candidate.Create(null, mail);
+            Action act = () => Candidate.Create(null!, mail);
 
             act.Should().Throw<ArgumentException>().WithMessage("*name*");
         }
@@ -43,7 +39,7 @@ namespace Domain.Tests
         {
             var name = _fixture.Create<string>();
 
-            Action act = () => Candidate.Create(name, null);
+            Action act = () => Candidate.Create(name, null!);
 
             act.Should().Throw<ArgumentException>().WithMessage("*mail*");
         }

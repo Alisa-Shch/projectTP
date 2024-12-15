@@ -1,7 +1,4 @@
-﻿using AutoFixture;
-using NUnit.Framework;
-
-namespace Domain.Tests
+﻿namespace Domain.Tests
 {
     public class WorkflowApproveTests
     {
@@ -16,25 +13,34 @@ namespace Domain.Tests
         [Test]
         public void CreateWorkflow()
         {
-            _fixture.Customize<Step>(_ => new StepBuilder(true));
-            var id = _fixture.Create<Guid>();
-            var steps = _fixture.CreateMany<Step>().ToArray();
-            var workflow = new Workflow(id, steps, _fixture.Create<DateTime>());
+            _fixture.Customize<CandidateWorkflowStep>(_ => new StepBuilder());
+            var employeeId = _fixture.Create<Guid>();
+            var candidateId = _fixture.Create<Guid>();
+            var template = new TemplateBuilder().Create(typeof(WorkflowTemplate), (ISpecimenContext)_fixture) as WorkflowTemplate;
 
-            NUnit.Framework.Assert.That(workflow, Is.Not.Null);
+            template.Should().NotBeNull();
+            template.Should().BeOfType<WorkflowTemplate>();
+
+            var workflow = CandidateWorkflow.Create(template, employeeId, candidateId);
+
             workflow.Should().NotBeNull();
-            workflow.Id.Should().Be(id);
-            workflow.Steps.Should().BeEquivalentTo(steps);
-            NUnit.Framework.Assert.That(id, Is.EqualTo(workflow.Id));
+            workflow.EmployeeId.Should().Be(employeeId);
+            workflow.CandidateId.Should().Be(candidateId);
+            workflow.Steps.Should().BeEquivalentTo(template.Steps);
         }
 
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void CreateWorkflowWithNullStep(bool isUser)
+        public void CreateWorkflowWithNullStep()
         {
-            _fixture.Customize<Step>(_ => new StepBuilder(isUser));
-            NUnit.Framework.Assert.Throws<ArgumentException>(() => new Workflow(_fixture.Create<Guid>(), null, _fixture.Create<DateTime>()), "steps");
+            _fixture.Customize<CandidateWorkflowStep>(_ => new StepBuilder());
+            var template = new TemplateBuilder().Create(typeof(WorkflowTemplate), (ISpecimenContext)_fixture) as WorkflowTemplate;
+            var employeeId = _fixture.Create<Guid>();
+            var candidateId = _fixture.Create<Guid>();
+
+            template.Should().NotBeNull();
+            template.Should().BeOfType<WorkflowTemplate>();
+
+            FluentActions.Invoking(() => CandidateWorkflow.Create(template, employeeId, candidateId)).Should().Throw<ArgumentException>().WithMessage("*steps*");
         }
     }
 }

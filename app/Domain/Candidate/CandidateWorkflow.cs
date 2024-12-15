@@ -10,9 +10,9 @@
         public DateTime CreateAt { get; }
         public Status Status { get; private set; }
         public string? Comment { get; private set; }
-        public IEnumerable<CandidateWorkflowStep> Steps { get; }
+        public List<CandidateWorkflowStep> Steps { get; }
         
-        private CandidateWorkflow(Guid id, Guid templateId, Guid employeeId, Guid candidateId, IEnumerable<CandidateWorkflowStep> steps, DateTime createAt)
+        private CandidateWorkflow(Guid id, Guid templateId, Guid employeeId, Guid candidateId, List<CandidateWorkflowStep> steps, DateTime createAt)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(templateId));
@@ -25,7 +25,7 @@
             TemplateId = templateId;
             EmployeeId = employeeId;
             CandidateId = candidateId;
-            Steps = steps.ToList().AsReadOnly();
+            Steps = steps;
             CreateAt = createAt;
         }
 
@@ -35,7 +35,7 @@
             ArgumentException.ThrowIfNullOrEmpty(nameof(employeeId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(candidateId));
 
-            return new(Guid.NewGuid(), template.Id, employeeId, candidateId, template.Steps.Select(CandidateWorkflowStep.Create), DateTime.UtcNow);
+            return new(Guid.NewGuid(), template.Id, employeeId, candidateId, template.Steps.Select(CandidateWorkflowStep.Create).ToList(), DateTime.UtcNow);
         }
 
         public void Approve(Guid userId, string comment)

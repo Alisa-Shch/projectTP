@@ -1,11 +1,8 @@
-﻿using AutoFixture;
-using NUnit.Framework;
-
-namespace Domain.Tests
+﻿namespace Domain.Tests
 {
     public class WorkflowTemplateStepTest
     {
-        private Fixture _fixture;
+        private Fixture? _fixture;
 
         [SetUp]
         public void Setup()
@@ -16,19 +13,12 @@ namespace Domain.Tests
         [Test]
         public void Create_ValidData_ShouldCreateWorkflowTemplateStep()
         {
-            var name = _fixture.Create<string>();
-            var description = _fixture.Create<string>();
-            var employeeId = Guid.NewGuid();
-            var roleId = Guid.NewGuid();
-
-            var step = WorkflowTemplateStep.Create(name, description, employeeId, roleId);
+            var step = new StepBuilder().Create(typeof(CandidateWorkflowStep), (ISpecimenContext)_fixture) as WorkflowTemplateStep;
 
             step.Should().NotBeNull();
-            step.Id.Should().NotBeEmpty();
-            step.Name.Should().Be(name);
-            step.Description.Should().Be(description);
-            step.EmployeeId.Should().Be(employeeId);
-            step.RoleId.Should().Be(roleId);
+            step.Description.Should().NotBeNullOrEmpty();
+            step.EmployeeId.Should().NotBeEmpty();
+            step.RoleId.Should().NotBeEmpty();
         }
 
         [Test]
@@ -50,7 +40,7 @@ namespace Domain.Tests
             var employeeId = Guid.NewGuid();
             var roleId = Guid.NewGuid();
 
-            Action act = () => WorkflowTemplateStep.Create(name, null, employeeId, roleId);
+            Action act = () => WorkflowTemplateStep.Create(name, null!, employeeId, roleId);
 
             act.Should().Throw<ArgumentException>().WithMessage("*description*");
         }

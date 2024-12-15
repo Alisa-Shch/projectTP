@@ -5,9 +5,9 @@
         public Guid Id { get; }
         public string Name { get; }
         public string Description { get; }
-        public IEnumerable<WorkflowTemplateStep> Steps { get; }        
+        public List<WorkflowTemplateStep> Steps { get; }        
 
-        private WorkflowTemplate(Guid id, string name, string description, IEnumerable<WorkflowTemplateStep> steps)
+        private WorkflowTemplate(Guid id, string name, string description, List<WorkflowTemplateStep> steps)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
@@ -17,10 +17,10 @@
             Id = id;
             Name = name;
             Description = description;
-            Steps = steps.ToList().AsReadOnly();
+            Steps = steps;
         }
 
-        public static WorkflowTemplate Create(string name, string description, IEnumerable<WorkflowTemplateStep> steps)
+        public static WorkflowTemplate Create(string name, string description, List<WorkflowTemplateStep> steps)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(nameof(description));

@@ -1,12 +1,9 @@
-﻿using AutoFixture;
-using NUnit.Framework;
-
-namespace Domain.Tests
+﻿namespace Domain.Tests
 {
     [TestFixture]
     public class CompanyTest
     {
-        private Fixture _fixture;
+        private Fixture? _fixture;
 
         [SetUp]
         public void Setup()
@@ -18,7 +15,6 @@ namespace Domain.Tests
         public void Create_ValidName_ShouldCreateCompany()
         {
             var name = _fixture.Create<string>();
-
             var company = Company.Create(name);
 
             company.Should().NotBeNull();
@@ -29,7 +25,7 @@ namespace Domain.Tests
         [Test]
         public void Create_NullName_ShouldThrowArgumentException()
         {
-            Action act = () => Company.Create(null);
+            Action act = () => Company.Create(null!);
 
             act.Should().Throw<ArgumentException>().WithMessage("*name*");
         }

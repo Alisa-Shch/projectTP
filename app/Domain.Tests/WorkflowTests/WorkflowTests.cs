@@ -1,22 +1,27 @@
-﻿using NUnit.Framework;
-
-namespace Domain.Tests
+﻿namespace Domain.Tests
 {
     [TestFixture]
     internal class WorkflowTests
     {
+        private Fixture _fixture;
+
+        [SetUp]
+        public void Setup()
+        {
+            _fixture = new Fixture();
+        }
+
         [Test]
         public void Create_ValidData_ShouldCreateWorkflow()
         {
-            var template = new WorkflowTemplate(Guid.NewGuid(), "Test Template", "Description", new List<WorkflowStep>());
-            var invitingId = Guid.NewGuid();
+            var template = new TemplateBuilder().Create(typeof(WorkflowTemplate), (ISpecimenContext)_fixture) as WorkflowTemplate;
+            var employeeId = Guid.NewGuid();
             var candidateId = Guid.NewGuid();
-
-            var workflow = Workflow.Create(template, invitingId, candidateId);
+            var workflow = CandidateWorkflow.Create(template, employeeId, candidateId);
 
             workflow.Should().NotBeNull();
             workflow.Id.Should().NotBeEmpty();
-            workflow.InvitingId.Should().Be(invitingId);
+            workflow.EmployeeId.Should().Be(employeeId);
             workflow.CandidateId.Should().Be(candidateId);
         }
 
@@ -24,31 +29,35 @@ namespace Domain.Tests
         public void Approve_InvalidWorkflow_ShouldThrowException()
         {
             var workflow = GetSampleWorkflow();
-            var user = new Employers(Guid.NewGuid(), "Test User");
+            var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
-            workflow.Approve(user, "Approval message");
+            workflow.Invoking(x => x.Approve(user.Id, "Approval message")).Should().Throw<InvalidOperationException>();
         }
 
         [Test]
         public void Reject_CompletedWorkflow_ShouldThrowInvalidOperationException()
         {
             var workflow = GetSampleWorkflow();
-            var user = new Employers(Guid.NewGuid(), "Test User");
+            var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
-            workflow.Reject(user, "Rejection reason");
-
-            Assert.Throws<InvalidOperationException>(() => workflow.Reject(user, "Rejection reason"));
+            workflow.Reject(user.Id, "Rejection reason");
+            workflow.Invoking(x => x.Reject(user.Id, "Rejection reason")).Should().Throw<InvalidOperationException>();
         }
 
-        private Workflow GetSampleWorkflow()
+        private CandidateWorkflow GetSampleWorkflow()
         {
-            var template = WorkflowTemplate.Create("Template", "Description", new List<WorkflowStep>
+            var name = _fixture.Create<string>();
+            var description = _fixture.Create<string>();
+            var employeeId = _fixture.Create<Guid>();
+            var roleId = _fixture.Create<Guid>();
+
+            var template = WorkflowTemplate.Create("Template", "Description", new List<WorkflowTemplateStep>
             {
-                WorkflowStep.Create("Step 1", Status.InProgress),
-                WorkflowStep.Create("Step 2", Status.Pending)
+                WorkflowTemplateStep.Create(name, description, employeeId, roleId),
+                WorkflowTemplateStep.Create(name, description, employeeId, roleId)
             });
 
-            return Workflow.Create(template, Guid.NewGuid(), Guid.NewGuid());
+            return CandidateWorkflow.Create(template, Guid.NewGuid(), Guid.NewGuid());
         }
     }
 }

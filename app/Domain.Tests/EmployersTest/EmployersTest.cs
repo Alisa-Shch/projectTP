@@ -1,12 +1,9 @@
-﻿using AutoFixture;
-using NUnit.Framework;
-
-namespace Domain.Tests
+﻿namespace Domain.Tests
 {
     [TestFixture]
     public class EmployersTest
     {
-        private Fixture _fixture;
+        private Fixture? _fixture;
 
         [SetUp]
         public void Setup()
@@ -19,12 +16,11 @@ namespace Domain.Tests
         {
             var roleId = Guid.NewGuid();
             var name = _fixture.Create<string>();
-
             var employer = Employers.Create(roleId, name);
 
             employer.Should().NotBeNull();
             employer.Id.Should().NotBeEmpty();
-            employer.RoleID.Should().Be(roleId);
+            employer.RoleId.Should().Be(roleId);
             employer.Name.Should().Be(name);
         }
 
@@ -43,7 +39,7 @@ namespace Domain.Tests
         {
             var roleId = Guid.NewGuid();
 
-            Action act = () => Employers.Create(roleId, null);
+            Action act = () => Employers.Create(roleId, null!);
 
             act.Should().Throw<ArgumentException>().WithMessage("*name*");
         }
