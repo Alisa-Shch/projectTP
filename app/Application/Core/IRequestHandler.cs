@@ -11,5 +11,4 @@
     {
         Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
     }
-
 }
