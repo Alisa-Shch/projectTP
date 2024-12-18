@@ -1,13 +1,15 @@
-﻿namespace Domain
+﻿using System.Collections.ObjectModel;
+
+namespace Domain
 {
     public class WorkflowTemplate
     {
         public Guid Id { get; }
         public string Name { get; }
         public string Description { get; }
-        public List<WorkflowTemplateStep> Steps { get; }
+        public ReadOnlyCollection<WorkflowTemplateStep> Steps { get; }
 
-        private WorkflowTemplate(Guid id, string name, string description, List<WorkflowTemplateStep> steps)
+        private WorkflowTemplate(Guid id, string name, string description, ReadOnlyCollection<WorkflowTemplateStep> steps)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
@@ -20,7 +22,7 @@
             Steps = steps;
         }
 
-        public static WorkflowTemplate Create(string name, string description, List<WorkflowTemplateStep> steps)
+        public static WorkflowTemplate Create(string name, string description, ReadOnlyCollection<WorkflowTemplateStep> steps)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(nameof(description));
