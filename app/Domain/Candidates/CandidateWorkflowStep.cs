@@ -30,43 +30,43 @@
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(templateStep));
 
-            return new(templateStep.Description, templateStep.RoleId, templateStep.EmployeeId, DateTime.UtcNow, 1);
+            return new(templateStep.Description, templateStep.RoleId, templateStep.EmployeeId, DateTime.UtcNow, templateStep.NumberStep);
         }
 
-        public void Approve(Guid userId, string comment)
+        internal void Approve(Employers user, string comment)
         {
-            ArgumentNullException.ThrowIfNull(nameof(userId));
+            ArgumentNullException.ThrowIfNull(nameof(user));
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
 
-            CheckUser(userId);
+            Check(user);
 
             Status = Status.Approved;
             Comment = comment;
             ModifiedDate = DateTime.UtcNow;
         }
 
-        public void Reject(Guid userId, string comment)
+        internal void Reject(Employers user, string comment)
         {
-            ArgumentNullException.ThrowIfNull(nameof(userId));
+            ArgumentNullException.ThrowIfNull(nameof(user));
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
 
-            CheckUser(userId);
+            Check(user);
 
             Status = Status.Rejected;
             Comment = comment;
             ModifiedDate = DateTime.UtcNow;
         }
 
-        public void Restart()
+        internal void Restart()
         {
             Status = Status.InProgress;
             Comment = null;
             ModifiedDate = DateTime.UtcNow;
         }
 
-        public void CheckUser(Guid userId)
+        public void Check(Employers user)
         {
-            if (userId != EmployeeId)
+            if (user.Id != EmployeeId)
             {
                 throw new Exception("User is not authorized to approve/reject this step.");
             }

@@ -1,68 +1,54 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Domain
+﻿namespace Domain
 {
     public class CandidateWorkflow
     {
         public Guid Id { get; }
         public string? Description { get; private set; }
         public Guid TemplateId { get; private set; }
-        public Guid? EmployeeId { get; private set; }
-        public Guid? RoleId { get; private set; }
-        public DateTime CreateAt { get; }
-        public Status Status { get; private set; }
         public string? Comment { get; private set; }
-        public ReadOnlyCollection<CandidateWorkflowStep> Steps { get; }
+        public IReadOnlyCollection<CandidateWorkflowStep> Steps { get; }
 
-        private CandidateWorkflow(Guid id, Guid templateId, Guid? employeeId, Guid? roleId, ReadOnlyCollection<CandidateWorkflowStep> steps, DateTime createAt)
+        private CandidateWorkflow(Guid id, Guid templateId, IReadOnlyCollection<CandidateWorkflowStep> steps)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(templateId));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(employeeId));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(steps));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(createAt));
 
             Id = id;
             TemplateId = templateId;
-            EmployeeId = employeeId;
-            RoleId = roleId;
             Steps = steps;
-            CreateAt = createAt;
         }
 
-        public static CandidateWorkflow Create(WorkflowTemplate template, Guid? employeeId, Guid? roleId)
+        public static CandidateWorkflow Create(WorkflowTemplate template)
         {
             ArgumentNullException.ThrowIfNull(nameof(template));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(employeeId));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
 
-            return new(Guid.NewGuid(), template.Id, employeeId, roleId, new ReadOnlyCollection<CandidateWorkflowStep>(template.Steps.Select(CandidateWorkflowStep.Create).ToList()), DateTime.UtcNow);
+            return new(Guid.NewGuid(), template.Id, new List<CandidateWorkflowStep>(template.Steps.Select(CandidateWorkflowStep.Create)));
         }
 
-        public void Approve(Guid userId, string comment)
+        internal void Approve(Employers user, string comment)
         {
-            ArgumentNullException.ThrowIfNull(nameof(userId));
+            ArgumentNullException.ThrowIfNull(nameof(user));
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
 
             CheckStatus();
 
             var step = GetStepInProgress();
-            step.Approve(userId, comment);
+            step.Approve(user, comment);
         }
 
-        public void Reject(Guid userId, string comment)
+        internal void Reject(Employers user, string comment)
         {
-            ArgumentNullException.ThrowIfNull(nameof(userId));
+            ArgumentNullException.ThrowIfNull(nameof(user));
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
 
             CheckStatus();
 
             var step = GetStepInProgress();
-            step.Reject(userId, comment);
+            step.Reject(user, comment);
         }
 
-        public void Restart()
+        internal void Restart()
         {
             CheckStatus();
 

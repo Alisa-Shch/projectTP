@@ -4,42 +4,36 @@
     {
         public Guid Id { get; }
         public Guid VacancyId { get; }
-        public string Name { get; }
-        public string Mail { get; }
-        public CandidateDocument? Document { get; }
+        public CandidateDocument Document { get; }
         public CandidateWorkflow Workflow { get; }
 
-        private Candidate(Guid id, string name, string mail, CandidateWorkflow workflow, CandidateDocument? document = null)
+        private Candidate(Guid id, CandidateWorkflow workflow, CandidateDocument document)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(mail));
             ArgumentNullException.ThrowIfNull(nameof(workflow));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(document));
 
             Id = id;
-            Name = name;
-            Mail = mail;
             Workflow = workflow;
             Document = document;
         }
 
-        public static Candidate Create(string name, string mail, CandidateWorkflow workflow, CandidateDocument? document = null)
+        public static Candidate Create(CandidateWorkflow workflow, CandidateDocument document)
         {
-            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(mail));
             ArgumentNullException.ThrowIfNull(nameof(workflow));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(document));
 
-            return new Candidate(Guid.NewGuid(), name, mail, workflow, document);
+            return new Candidate(Guid.NewGuid(), workflow, document);
         }
 
-        public void Approve(Guid userId, string comment)
+        public void Approve(Employers user, string comment)
         {
-            Workflow.Approve(userId, comment);
+            Workflow.Approve(user, comment);
         }
 
-        public void Reject(Guid userId, string comment)
+        public void Reject(Employers user, string comment)
         {
-            Workflow.Reject(userId, comment);
+            Workflow.Reject(user, comment);
         }
 
         public void Restart()
