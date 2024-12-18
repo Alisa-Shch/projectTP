@@ -31,6 +31,7 @@
 
             return new Candidate(Guid.NewGuid(), name, mail, workflow, document);
         }
+
         public void Approve(Guid userId, string comment)
         {
             Workflow.Approve(userId, comment);

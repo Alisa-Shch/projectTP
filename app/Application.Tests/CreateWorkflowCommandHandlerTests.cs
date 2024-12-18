@@ -1,3 +1,5 @@
+using Domain;
+
 namespace Application.Tests
 {
 	[TestFixture]
@@ -18,7 +20,6 @@ namespace Application.Tests
 		[Test]
 		public async Task Handle_Should_Create_Workflow_And_Return_Candidate_Id()
 		{
-			// Arrange
 			var userReferaleId = Guid.NewGuid();
 			var workflowTemplateId = Guid.NewGuid();
 			var document = new Document("Test Document", "5 years experience");
@@ -38,10 +39,8 @@ namespace Application.Tests
 
 			var command = new CreateWorkflowCommand(userReferaleId, workflowTemplateId, document);
 
-			// Act
 			var result = await _handler.Handle(command, CancellationToken.None);
 
-			// Assert
 			result.ShouldBe(userReferaleId);
 			_workflowTemplateRepositoryMock.Verify(
 				repo => repo.GetById(workflowTemplateId, It.IsAny<CancellationToken>()),
@@ -54,14 +53,12 @@ namespace Application.Tests
 		[Test]
 		public void Handle_Should_Throw_Exception_When_Command_Is_Null()
 		{
-			// Act & Assert
 			Should.ThrowAsync<ArgumentNullException>(() => _handler.Handle(null, CancellationToken.None));
 		}
 
 		[Test]
 		public async Task Handle_Should_Throw_Exception_When_WorkflowTemplate_Not_Found()
 		{
-			// Arrange
 			var userReferaleId = Guid.NewGuid();
 			var workflowTemplateId = Guid.NewGuid();
 			var document = new Document("Test Document", "5 years experience");
@@ -72,7 +69,6 @@ namespace Application.Tests
 
 			var command = new CreateWorkflowCommand(userReferaleId, workflowTemplateId, document);
 
-			// Act & Assert
 			var exception = await Should.ThrowAsync<InvalidOperationException>(() => _handler.Handle(command, CancellationToken.None));
 			exception.Message.ShouldBe("Workflow template not found.");
 		}

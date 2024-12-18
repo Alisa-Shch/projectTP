@@ -16,7 +16,6 @@ namespace Application.Tests
         [Test]
         public async Task Handle_Should_Return_Workflows()
         {
-            // Arrange
             var userId = Guid.NewGuid();
             var isOpenOnly = true;
             var workflows = new List<CandidateWorkflow>
@@ -30,14 +29,12 @@ namespace Application.Tests
 
             _workflowRepositoryMock
                 .Setup(repo => repo.GetByUserId(userId, isOpenOnly, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(workflows);
+                .ReturnsAsync((IReadOnlyCollection<Domain.CandidateWorkflow>)workflows);
 
             var query = new GetUserWorkflowsQuery(userId, isOpenOnly);
 
-            // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
-            // Assert
             result.ShouldNotBeNull();
             result.ShouldNotBeEmpty();
             result.Count.ShouldBe(workflows.Count);
@@ -49,7 +46,6 @@ namespace Application.Tests
         [Test]
         public void Handle_Should_Throw_Exception_When_Query_Is_Null()
         {
-            // Act & Assert
             Should.ThrowAsync<ArgumentNullException>(() => _handler.Handle(null, CancellationToken.None));
         }
     }
