@@ -5,37 +5,37 @@
         public Guid Id { get; }
         public string? Description { get; private set; }
         public Guid TemplateId { get; private set; }
-        public Guid CandidateId { get; private set; }
-        public Guid EmployeeId { get; private set; }
+        public Guid? EmployeeId { get; private set; }
+        public Guid? RoleId { get; private set; }
         public DateTime CreateAt { get; }
         public Status Status { get; private set; }
         public string? Comment { get; private set; }
         public List<CandidateWorkflowStep> Steps { get; }
-        
-        private CandidateWorkflow(Guid id, Guid templateId, Guid employeeId, Guid candidateId, List<CandidateWorkflowStep> steps, DateTime createAt)
+
+        private CandidateWorkflow(Guid id, Guid templateId, Guid? employeeId, Guid? roleId, List<CandidateWorkflowStep> steps, DateTime createAt)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(templateId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(employeeId));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(candidateId));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(steps));
             ArgumentException.ThrowIfNullOrEmpty(nameof(createAt));
 
             Id = id;
             TemplateId = templateId;
             EmployeeId = employeeId;
-            CandidateId = candidateId;
+            RoleId = roleId;
             Steps = steps;
             CreateAt = createAt;
         }
 
-        public static CandidateWorkflow Create(WorkflowTemplate template, Guid employeeId, Guid candidateId)
+        public static CandidateWorkflow Create(WorkflowTemplate template, Guid? employeeId, Guid? roleId)
         {
             ArgumentNullException.ThrowIfNull(nameof(template));
             ArgumentException.ThrowIfNullOrEmpty(nameof(employeeId));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(candidateId));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
 
-            return new(Guid.NewGuid(), template.Id, employeeId, candidateId, template.Steps.Select(CandidateWorkflowStep.Create).ToList(), DateTime.UtcNow);
+            return new(Guid.NewGuid(), template.Id, employeeId, roleId, template.Steps.Select(CandidateWorkflowStep.Create).ToList(), DateTime.UtcNow);
         }
 
         public void Approve(Guid userId, string comment)
@@ -43,8 +43,8 @@
             ArgumentNullException.ThrowIfNull(nameof(userId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
 
-            CheckSteps();
-            var step = StepsInProgress();
+            CheckStatus();
+            var step = GetStepInProgress();
             step.Approve(userId, comment);
         }
 
@@ -53,35 +53,36 @@
             ArgumentNullException.ThrowIfNull(nameof(userId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
 
-            CheckSteps();
-            var step = StepsInProgress();
+            CheckStatus();
+            var step = GetStepInProgress();
             step.Reject(userId, comment);
         }
 
         public void Restart()
         {
-            CheckSteps();
+            CheckStatus();
             foreach (var step in Steps)
             {
                 step.Restart();
             }
         }
 
-        public void CheckSteps()
+        public void CheckStatus()
         {
             if (Steps.All(x => x.Status == Status.Approved))
             {
-                throw new Exception("exception");
+                throw new Exception("All steps are already approved.");
             }
             if (Steps.Any(x => x.Status == Status.Rejected))
             {
-                throw new Exception("exception");
+                throw new Exception("Workflow contains rejected steps.");
             }
         }
 
-        public CandidateWorkflowStep StepsInProgress()
+        public CandidateWorkflowStep GetStepInProgress()
         {
-            return Steps.OrderBy(x => x.NumberStep).First(x => x.Status == Status.InProgress);
+            return Steps.OrderBy(x => x.NumberStep).FirstOrDefault(x => x.Status == Status.InProgress)
+                   ?? throw new InvalidOperationException("No steps are in progress.");
         }
     }
 }

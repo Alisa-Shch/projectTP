@@ -13,6 +13,12 @@ namespace Application
 
         public Step(string description, Guid roleId, Guid employeeId, DateTime modifiedDate, int numberStep)
         {
+            ArgumentException.ThrowIfNullOrEmpty(nameof(description));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(employeeId));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(modifiedDate));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(numberStep));
+
             Status = Status.InProgress;
             Description = description;
             RoleId = roleId;

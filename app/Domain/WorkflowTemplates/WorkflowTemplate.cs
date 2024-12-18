@@ -5,7 +5,7 @@
         public Guid Id { get; }
         public string Name { get; }
         public string Description { get; }
-        public List<WorkflowTemplateStep> Steps { get; }        
+        public List<WorkflowTemplateStep> Steps { get; }
 
         private WorkflowTemplate(Guid id, string name, string description, List<WorkflowTemplateStep> steps)
         {

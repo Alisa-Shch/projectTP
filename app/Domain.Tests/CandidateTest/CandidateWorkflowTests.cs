@@ -1,7 +1,7 @@
 ﻿namespace Domain.Tests
 {
     [TestFixture]
-    internal class WorkflowTests
+    public class CandidateWorkflowTests
     {
         private Fixture _fixture;
 
@@ -22,7 +22,6 @@
             workflow.Should().NotBeNull();
             workflow.Id.Should().NotBeEmpty();
             workflow.EmployeeId.Should().Be(employeeId);
-            workflow.CandidateId.Should().Be(candidateId);
         }
 
         [Test]

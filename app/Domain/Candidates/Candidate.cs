@@ -7,24 +7,30 @@
         public Employers? ReferralId { get; }
         public string Name { get; }
         public string Mail { get; }
-    
-        private Candidate(Guid id, string name, string mail)
+        public CandidateDocument? Document { get; }
+        public CandidateWorkflow Workflow { get; }
+
+        private Candidate(Guid id, string name, string mail, CandidateWorkflow workflow, CandidateDocument? document = null)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(nameof(mail));
+            ArgumentNullException.ThrowIfNull(nameof(workflow));
 
             Id = id;
             Name = name;
             Mail = mail;
+            Workflow = workflow;
+            Document = document;
         }
 
-        public static Candidate Create(string name, string mail)
+        public static Candidate Create(string name, string mail, CandidateWorkflow workflow, CandidateDocument? document = null)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(nameof(mail));
+            ArgumentNullException.ThrowIfNull(nameof(workflow));
 
-            return new(Guid.NewGuid(), name, mail);
+            return new Candidate(Guid.NewGuid(), name, mail, workflow, document);
         }
     }
 }

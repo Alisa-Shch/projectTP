@@ -5,7 +5,7 @@
         public string Name { get; }
         public string WorkExperience { get; }
 
-        private CandidateDocument (string name, string workExperience)
+        private CandidateDocument(string name, string workExperience)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(nameof(workExperience));

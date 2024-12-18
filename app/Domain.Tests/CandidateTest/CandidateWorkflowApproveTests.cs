@@ -1,6 +1,7 @@
 ﻿namespace Domain.Tests
 {
-    public class WorkflowApproveTests
+    [TestFixture]
+    public class CandidateWorkflowApproveTests
     {
         private Fixture _fixture;
 
@@ -25,7 +26,6 @@
 
             workflow.Should().NotBeNull();
             workflow.EmployeeId.Should().Be(employeeId);
-            workflow.CandidateId.Should().Be(candidateId);
             workflow.Steps.Should().BeEquivalentTo(template.Steps);
         }
 

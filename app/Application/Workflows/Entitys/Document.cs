@@ -1,4 +1,6 @@
-﻿namespace Application
+﻿using Domain;
+
+namespace Application
 {
     public class Document
     {
@@ -7,6 +9,9 @@
 
         public Document(string name, string workExperience)
         {
+            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(workExperience));
+
             Name = name;
             WorkExperience = workExperience;
         }

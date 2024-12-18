@@ -1,9 +1,7 @@
-﻿using System.Xml.Linq;
-
-namespace Domain.Tests
+﻿namespace Domain.Tests
 {
     [TestFixture]
-    public class WorkflowStepTest
+    public class CandidateWorkflowStepTests
     {
         private Fixture _fixture;
 

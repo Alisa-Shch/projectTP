@@ -2,26 +2,26 @@
 {
     public class CandidateWorkflowStep
     {
-        public Guid EmployeeId { get; }
-        public Guid RoleId { get; }
+        public Guid? EmployeeId { get; }
+        public Guid? RoleId { get; }
         public string? Description { get; private set; }
         public Status Status { get; private set; }
         public string? Comment { get; private set; }
         public DateTime ModifiedDate { get; private set; }
         public int NumberStep { get; }
 
-        private CandidateWorkflowStep(string description, Guid roleId, Guid employeeId, DateTime modifiedDate, int numberStep)
+        private CandidateWorkflowStep(string description, Guid? employeeId, Guid? roleId, DateTime modifiedDate, int numberStep)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(description));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(employeeId));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(modifiedDate));
             ArgumentException.ThrowIfNullOrEmpty(nameof(numberStep));
 
             Status = Status.InProgress;
             Description = description;
-            RoleId = roleId;
             EmployeeId = employeeId;
+            RoleId = roleId;
             ModifiedDate = modifiedDate;
             NumberStep = numberStep;
         }
@@ -39,6 +39,7 @@
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
 
             CheckUser(userId);
+
             Status = Status.Approved;
             Comment = comment;
             ModifiedDate = DateTime.UtcNow;
@@ -50,6 +51,7 @@
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
 
             CheckUser(userId);
+
             Status = Status.Rejected;
             Comment = comment;
             ModifiedDate = DateTime.UtcNow;
@@ -64,9 +66,13 @@
 
         public void CheckUser(Guid userId)
         {
-            if (userId != EmployeeId || Status != Status.InProgress)
+            if (userId != EmployeeId)
             {
-                throw new Exception("exception");
+                throw new Exception("User is not authorized to approve/reject this step.");
+            }
+            if (Status != Status.InProgress)
+            {
+                throw new Exception("The step cannot be processed.");
             }
         }
     }

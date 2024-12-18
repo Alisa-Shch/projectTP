@@ -7,13 +7,19 @@
 
         public CreateWorkflowCommandHandler(IWorkflowTemplateRepository workflowTemplateRepository, ICandidateWorkflowRepository workflowRepository)
         {
+            ArgumentException.ThrowIfNullOrEmpty(nameof(workflowTemplateRepository));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(workflowRepository));
+
             _workflowTemplateRepository = workflowTemplateRepository;
             _workflowRepository = workflowRepository;
         }
 
         public async Task<Guid> Handle(CreateWorkflowCommand request, CancellationToken cancellationToken)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
 
             var workflowTemplate = await _workflowTemplateRepository.GetById(request.WorkflowTemplateId, cancellationToken).ConfigureAwait(false);
 
