@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using System.Collections.ObjectModel;
+using Domain;
 
 namespace Application
 {
@@ -19,7 +20,7 @@ namespace Application
 
             var workflows = await _workflowRepository.GetByUserId(request.UserId, request.IsOpenOnly, cancellationToken).ConfigureAwait(false);
 
-            return workflows.Select(w => CandidateWorkflow.Create(WorkflowTemplate.Create("", w.Description, []), w.EmployeeId, w.RoleId)).ToArray();
+            return workflows.Select(w => Domain.CandidateWorkflow.Create(WorkflowTemplate.Create("", w.Description, new ReadOnlyCollection<WorkflowTemplateStep>(new List<WorkflowTemplateStep>())), w.EmployeeId, w.RoleId)).ToArray();
         }
     }
 }

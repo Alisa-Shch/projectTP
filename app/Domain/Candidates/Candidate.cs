@@ -4,7 +4,6 @@
     {
         public Guid Id { get; }
         public Guid VacancyId { get; }
-        public Employers? ReferralId { get; }
         public string Name { get; }
         public string Mail { get; }
         public CandidateDocument? Document { get; }
@@ -31,6 +30,20 @@
             ArgumentNullException.ThrowIfNull(nameof(workflow));
 
             return new Candidate(Guid.NewGuid(), name, mail, workflow, document);
+        }
+        public void Approve(Guid userId, string comment)
+        {
+            Workflow.Approve(userId, comment);
+        }
+
+        public void Reject(Guid userId, string comment)
+        {
+            Workflow.Reject(userId, comment);
+        }
+
+        public void Restart()
+        {
+            Workflow.Restart();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Domain.Tests
+﻿using System.Collections.ObjectModel;
+
+namespace Domain.Tests
 {
     [TestFixture]
     public class CandidateWorkflowTests
@@ -50,11 +52,13 @@
             var employeeId = _fixture.Create<Guid>();
             var roleId = _fixture.Create<Guid>();
 
-            var template = WorkflowTemplate.Create("Template", "Description", new List<WorkflowTemplateStep>
-            {
+            List<WorkflowTemplateStep> steps =
+            [
                 WorkflowTemplateStep.Create(name, description, employeeId, roleId),
                 WorkflowTemplateStep.Create(name, description, employeeId, roleId)
-            });
+            ];
+
+            var template = WorkflowTemplate.Create("Template", "Description", new ReadOnlyCollection<WorkflowTemplateStep>(steps));
 
             return CandidateWorkflow.Create(template, Guid.NewGuid(), Guid.NewGuid());
         }

@@ -1,4 +1,6 @@
-﻿namespace Domain
+﻿using System.Collections.ObjectModel;
+
+namespace Domain
 {
     public class CandidateWorkflow
     {
@@ -10,9 +12,9 @@
         public DateTime CreateAt { get; }
         public Status Status { get; private set; }
         public string? Comment { get; private set; }
-        public List<CandidateWorkflowStep> Steps { get; }
+        public ReadOnlyCollection<CandidateWorkflowStep> Steps { get; }
 
-        private CandidateWorkflow(Guid id, Guid templateId, Guid? employeeId, Guid? roleId, List<CandidateWorkflowStep> steps, DateTime createAt)
+        private CandidateWorkflow(Guid id, Guid templateId, Guid? employeeId, Guid? roleId, ReadOnlyCollection<CandidateWorkflowStep> steps, DateTime createAt)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(templateId));
@@ -35,7 +37,7 @@
             ArgumentException.ThrowIfNullOrEmpty(nameof(employeeId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
 
-            return new(Guid.NewGuid(), template.Id, employeeId, roleId, template.Steps.Select(CandidateWorkflowStep.Create).ToList(), DateTime.UtcNow);
+            return new(Guid.NewGuid(), template.Id, employeeId, roleId, new ReadOnlyCollection<CandidateWorkflowStep>(template.Steps.Select(CandidateWorkflowStep.Create).ToList()), DateTime.UtcNow);
         }
 
         public void Approve(Guid userId, string comment)
@@ -44,6 +46,7 @@
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
 
             CheckStatus();
+
             var step = GetStepInProgress();
             step.Approve(userId, comment);
         }
@@ -54,6 +57,7 @@
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
 
             CheckStatus();
+
             var step = GetStepInProgress();
             step.Reject(userId, comment);
         }
@@ -61,6 +65,7 @@
         public void Restart()
         {
             CheckStatus();
+
             foreach (var step in Steps)
             {
                 step.Restart();
