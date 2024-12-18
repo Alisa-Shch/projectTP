@@ -5,7 +5,7 @@
         public Guid Id { get; }
         public string Name { get; }
 
-        private Role(Guid id,string name)
+        private Role(Guid id, string name)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));
