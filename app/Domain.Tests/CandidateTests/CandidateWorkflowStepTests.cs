@@ -30,7 +30,7 @@
             var step = new StepBuilder().Create(typeof(CandidateWorkflowStep), (ISpecimenContext)_fixture) as CandidateWorkflowStep;
             var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
-            step.Approve(user.Id, "Approved!");
+            step.Approve(user, "Approved!");
 
             step.Status.Should().Be(Status.Approved);
             step.Comment.Should().Be("Approved!");

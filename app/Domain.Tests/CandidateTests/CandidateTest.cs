@@ -14,63 +14,25 @@
         [Test]
         public void Create_ValidData_ShouldCreateCandidate()
         {
-            var name = _fixture.Create<string>();
-            var mail = _fixture.Create<string>();
-            var employeeId = _fixture.Create<Guid>();
-            var roleId = _fixture.Create<Guid>();
+            var document = _fixture.Create<CandidateDocument>();
             var template = new TemplateBuilder().Create(typeof(WorkflowTemplate), (ISpecimenContext)_fixture) as WorkflowTemplate;
-            var workflow = CandidateWorkflow.Create(template, employeeId, roleId);
-            var candidate = Candidate.Create(name, mail, workflow);
+            var workflow = CandidateWorkflow.Create(template);
+            var candidate = Candidate.Create(workflow, document);
 
             candidate.Should().NotBeNull();
-            candidate.Name.Should().Be(name);
-            candidate.Mail.Should().Be(mail);
+            candidate.Document.Should().Be(document);
             candidate.Workflow.Should().NotBeNull();
         }
 
         [Test]
-        public void Create_NullName_ShouldThrowArgumentException()
+        public void Create_NullDocument_ShouldThrowArgumentException()
         {
-            var mail = _fixture.Create<string>();
-            var employeeId = _fixture.Create<Guid>();
-            var roleId = _fixture.Create<Guid>();
             var template = new TemplateBuilder().Create(typeof(WorkflowTemplate), (ISpecimenContext)_fixture) as WorkflowTemplate;
-            var workflow = CandidateWorkflow.Create(template, employeeId, roleId);
+            var workflow = CandidateWorkflow.Create(template);
 
-            Action act = () => Candidate.Create(null!, mail, workflow);
+            Action act = () => Candidate.Create(workflow, null!);
 
-            act.Should().Throw<ArgumentNullException>().WithMessage("*name*");
-        }
-
-        [Test]
-        public void Create_NullMail_ShouldThrowArgumentException()
-        {
-            var name = _fixture.Create<string>();
-
-            Action act = () => Candidate.Create(name, null, null!);
-
-            act.Should().Throw<ArgumentNullException>().WithMessage("*mail*");
-
-        }
-
-        [Test]
-        public void Create_EmptyMail_ShouldThrowArgumentException()
-        {
-            var name = _fixture.Create<string>();
-
-            Action act = () => Candidate.Create(name, string.Empty, null!);
-
-            act.Should().Throw<ArgumentException>().WithMessage("*mail*");
-        }
-
-        [Test]
-        public void Create_EmptyName_ShouldThrowArgumentException()
-        {
-            var mail = _fixture.Create<string>();
-
-            Action act = () => Candidate.Create(string.Empty, mail, null!);
-
-            act.Should().Throw<ArgumentException>().WithMessage("*name*");
+            act.Should().Throw<ArgumentNullException>().WithMessage("*document*");
         }
     }
 }

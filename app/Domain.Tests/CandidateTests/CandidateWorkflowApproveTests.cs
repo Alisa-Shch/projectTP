@@ -15,17 +15,14 @@
         public void CreateWorkflow()
         {
             _fixture.Customize<CandidateWorkflowStep>(_ => new StepBuilder());
-            var employeeId = _fixture.Create<Guid>();
-            var candidateId = _fixture.Create<Guid>();
             var template = new TemplateBuilder().Create(typeof(WorkflowTemplate), (ISpecimenContext)_fixture) as WorkflowTemplate;
 
             template.Should().NotBeNull();
             template.Should().BeOfType<WorkflowTemplate>();
 
-            var workflow = CandidateWorkflow.Create(template, employeeId, candidateId);
+            var workflow = CandidateWorkflow.Create(template);
 
             workflow.Should().NotBeNull();
-            workflow.EmployeeId.Should().Be(employeeId);
             workflow.Steps.Should().BeEquivalentTo(template.Steps);
         }
 
@@ -34,13 +31,11 @@
         {
             _fixture.Customize<CandidateWorkflowStep>(_ => new StepBuilder());
             var template = new TemplateBuilder().Create(typeof(WorkflowTemplate), (ISpecimenContext)_fixture) as WorkflowTemplate;
-            var employeeId = _fixture.Create<Guid>();
-            var candidateId = _fixture.Create<Guid>();
 
             template.Should().NotBeNull();
             template.Should().BeOfType<WorkflowTemplate>();
 
-            FluentActions.Invoking(() => CandidateWorkflow.Create(template, employeeId, candidateId)).Should().Throw<ArgumentException>().WithMessage("*steps*");
+            FluentActions.Invoking(() => CandidateWorkflow.Create(template)).Should().Throw<ArgumentException>().WithMessage("*steps*");
         }
     }
 }

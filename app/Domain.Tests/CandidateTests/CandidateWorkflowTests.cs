@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Domain.Tests
+﻿namespace Domain.Tests
 {
     [TestFixture]
     public class CandidateWorkflowTests
@@ -17,13 +15,10 @@ namespace Domain.Tests
         public void Create_ValidData_ShouldCreateWorkflow()
         {
             var template = new TemplateBuilder().Create(typeof(WorkflowTemplate), (ISpecimenContext)_fixture) as WorkflowTemplate;
-            var employeeId = Guid.NewGuid();
-            var candidateId = Guid.NewGuid();
-            var workflow = CandidateWorkflow.Create(template, employeeId, candidateId);
+            var workflow = CandidateWorkflow.Create(template);
 
             workflow.Should().NotBeNull();
             workflow.Id.Should().NotBeEmpty();
-            workflow.EmployeeId.Should().Be(employeeId);
         }
 
         [Test]
@@ -58,9 +53,9 @@ namespace Domain.Tests
                 WorkflowTemplateStep.Create(name, description, employeeId, roleId)
             ];
 
-            var template = WorkflowTemplate.Create("Template", "Description", new ReadOnlyCollection<WorkflowTemplateStep>(steps));
+            var template = WorkflowTemplate.Create("Template", "Description", new List<WorkflowTemplateStep>(steps));
 
-            return CandidateWorkflow.Create(template, Guid.NewGuid(), Guid.NewGuid());
+            return CandidateWorkflow.Create(template);
         }
     }
 }

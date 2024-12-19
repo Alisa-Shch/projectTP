@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Domain.Tests
+﻿namespace Domain.Tests
 {
     internal class TemplateBuilder : ISpecimenBuilder
     {
@@ -14,7 +12,7 @@ namespace Domain.Tests
             }
             var step = new StepBuilder().Create(typeof(CandidateWorkflowStep), (ISpecimenContext)_fixture);
 
-            return WorkflowTemplate.Create(context.Create<string>(), context.Create<string>(), (ReadOnlyCollection<WorkflowTemplateStep>)step);
+            return WorkflowTemplate.Create(context.Create<string>(), context.Create<string>(), (IReadOnlyCollection<WorkflowTemplateStep>)step);
         }
     }
 }
