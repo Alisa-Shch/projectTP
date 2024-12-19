@@ -27,7 +27,9 @@
             var workflow = GetSampleWorkflow();
             var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
-            workflow.Invoking(x => x.Approve(user.Id, "Approval message")).Should().Throw<InvalidOperationException>();
+            var candidate = CandidateBuilder.Create(_fixture);
+
+            candidate.Invoking(x => x.Approve(user, "Approval message")).Should().Throw<InvalidOperationException>();
         }
 
         [Test]
@@ -36,8 +38,10 @@
             var workflow = GetSampleWorkflow();
             var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
-            workflow.Reject(user.Id, "Rejection reason");
-            workflow.Invoking(x => x.Reject(user.Id, "Rejection reason")).Should().Throw<InvalidOperationException>();
+            var candidate = CandidateBuilder.Create(_fixture);
+
+            candidate.Reject(user, "Rejection reason");
+            candidate.Invoking(x => x.Reject(user, "Rejection reason")).Should().Throw<InvalidOperationException>();
         }
 
         private CandidateWorkflow GetSampleWorkflow()

@@ -30,7 +30,9 @@
             var step = new StepBuilder().Create(typeof(CandidateWorkflowStep), (ISpecimenContext)_fixture) as CandidateWorkflowStep;
             var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
-            step.Approve(user, "Approved!");
+            var candidate = CandidateBuilder.Create(_fixture);
+
+            candidate.Approve(user, "Approved!");
 
             step.Status.Should().Be(Status.Approved);
             step.Comment.Should().Be("Approved!");
@@ -42,7 +44,9 @@
             var step = new StepBuilder().Create(typeof(CandidateWorkflowStep), (ISpecimenContext)_fixture) as CandidateWorkflowStep;
             var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
-            step.Invoking(x => x.Approve(user.Id, "Trying to approve")).Should().Throw<UnauthorizedAccessException>();
+            var candidate = CandidateBuilder.Create(_fixture);
+
+            candidate.Invoking(x => x.Approve(user, "Trying to approve")).Should().Throw<UnauthorizedAccessException>();
         }
 
         [Test]
@@ -50,7 +54,9 @@
         {
             var step = new StepBuilder().Create(typeof(CandidateWorkflowStep), (ISpecimenContext)_fixture) as CandidateWorkflowStep;
 
-            step.Invoking(x => x.Restart()).Should().Throw<InvalidOperationException>();
+            var candidate = CandidateBuilder.Create(_fixture);
+
+            candidate.Invoking(x => x.Restart()).Should().Throw<InvalidOperationException>();
         }
 
         [Test]
@@ -59,7 +65,9 @@
             var step = new StepBuilder().Create(typeof(CandidateWorkflowStep), (ISpecimenContext)_fixture) as CandidateWorkflowStep;
             var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
-            step.Reject(user.Id, "Rejected!");
+            var candidate = CandidateBuilder.Create(_fixture);
+
+            candidate.Reject(user, "Rejected!");
 
             step.Status.Should().Be(Status.Rejected);
             step.Comment.Should().Be("Rejected!");
