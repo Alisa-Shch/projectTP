@@ -1,12 +1,12 @@
 ﻿namespace Domain
 {
-    public class Employers
+    public class Employee
     {
-        public Guid Id { get; }
-        public Guid RoleId { get; }
-        public string Name { get; }
+        public Guid Id { get; private set; }
+        public Guid RoleId { get; private set; }
+        public string Name { get; private set; }
 
-        private Employers(Guid id, Guid roleId, string name)
+        private Employee(Guid id, Guid roleId, string name)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
             ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
@@ -17,7 +17,7 @@
             Name = name;
         }
 
-        public static Employers Create(Guid roleId, string name)
+        public static Employee Create(Guid roleId, string name)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(name));

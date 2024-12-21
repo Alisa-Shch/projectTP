@@ -2,11 +2,9 @@
 {
     public class CandidateWorkflow
     {
-        public Guid Id { get; }
-        public string? Description { get; private set; }
+        public Guid Id { get; private set; }
         public Guid TemplateId { get; private set; }
-        public string? Comment { get; private set; }
-        public IReadOnlyCollection<CandidateWorkflowStep> Steps { get; }
+        public IReadOnlyCollection<CandidateWorkflowStep> Steps { get; private set; }
 
         private CandidateWorkflow(Guid id, Guid templateId, IReadOnlyCollection<CandidateWorkflowStep> steps)
         {
@@ -26,7 +24,7 @@
             return new(Guid.NewGuid(), template.Id, new List<CandidateWorkflowStep>(template.Steps.Select(CandidateWorkflowStep.Create)));
         }
 
-        internal void Approve(Employers user, string comment)
+        internal void Approve(Employee user, string comment)
         {
             ArgumentNullException.ThrowIfNull(nameof(user));
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
@@ -37,7 +35,7 @@
             step.Approve(user, comment);
         }
 
-        internal void Reject(Employers user, string comment)
+        internal void Reject(Employee user, string comment)
         {
             ArgumentNullException.ThrowIfNull(nameof(user));
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));

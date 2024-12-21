@@ -2,36 +2,43 @@
 {
     public class Candidate
     {
-        public Guid Id { get; }
-        public Guid VacancyId { get; }
-        public CandidateDocument Document { get; }
-        public CandidateWorkflow Workflow { get; }
+        public Guid Id { get; private set; }
+        public Guid VacancyId { get; private set; }
+        public Guid? ReferralId { get; private set; }
+        public CandidateDocument Document { get; private set; }
+        public CandidateWorkflow Workflow { get; private set; }
 
-        private Candidate(Guid id, CandidateWorkflow workflow, CandidateDocument document)
+        private Candidate(Guid id, Guid vacancyId, Guid? referralId, CandidateDocument document, CandidateWorkflow workflow)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
-            ArgumentNullException.ThrowIfNull(nameof(workflow));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(vacancyId));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(referralId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(document));
+            ArgumentNullException.ThrowIfNull(nameof(workflow));
 
             Id = id;
-            Workflow = workflow;
+            VacancyId = vacancyId;
+            ReferralId = referralId;
             Document = document;
+            Workflow = workflow;
         }
 
-        public static Candidate Create(CandidateWorkflow workflow, CandidateDocument document)
+        public static Candidate Create(Guid vacancyId, Guid? referralId, CandidateDocument document, CandidateWorkflow workflow)
         {
-            ArgumentNullException.ThrowIfNull(nameof(workflow));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(vacancyId));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(referralId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(document));
+            ArgumentNullException.ThrowIfNull(nameof(workflow));
 
-            return new Candidate(Guid.NewGuid(), workflow, document);
+            return new Candidate(Guid.NewGuid(), vacancyId, referralId, document, workflow);
         }
 
-        public void Approve(Employers user, string comment)
+        public void Approve(Employee user, string comment)
         {
             Workflow.Approve(user, comment);
         }
 
-        public void Reject(Employers user, string comment)
+        public void Reject(Employee user, string comment)
         {
             Workflow.Reject(user, comment);
         }

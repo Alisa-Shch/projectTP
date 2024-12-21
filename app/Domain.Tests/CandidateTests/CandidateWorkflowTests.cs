@@ -25,7 +25,7 @@
         public void Approve_InvalidWorkflow_ShouldThrowException()
         {
             var workflow = GetSampleWorkflow();
-            var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
+            var user = Employee.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
             var candidate = CandidateBuilder.Create(_fixture);
 
@@ -36,7 +36,7 @@
         public void Reject_CompletedWorkflow_ShouldThrowInvalidOperationException()
         {
             var workflow = GetSampleWorkflow();
-            var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
+            var user = Employee.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
             var candidate = CandidateBuilder.Create(_fixture);
 

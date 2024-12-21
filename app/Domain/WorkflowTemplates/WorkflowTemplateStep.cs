@@ -6,7 +6,7 @@
         public string Description { get; private set; }
         public Guid EmployeeId { get; private set; }
         public Guid RoleId { get; private set; }
-        public int NumberStep { get; }
+        public int NumberStep { get; private set; }
         
         private WorkflowTemplateStep(string name, string description, Guid employeeId, Guid roleId)
         {

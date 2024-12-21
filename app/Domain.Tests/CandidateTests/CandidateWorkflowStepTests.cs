@@ -28,7 +28,7 @@
         public void Approve_ValidUser_ShouldChangeStatusToApproved()
         {
             var step = new StepBuilder().Create(typeof(CandidateWorkflowStep), (ISpecimenContext)_fixture) as CandidateWorkflowStep;
-            var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
+            var user = Employee.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
             var candidate = CandidateBuilder.Create(_fixture);
 
@@ -42,7 +42,7 @@
         public void Approve_InvalidUser_ShouldThrowUnauthorizedAccessException()
         {
             var step = new StepBuilder().Create(typeof(CandidateWorkflowStep), (ISpecimenContext)_fixture) as CandidateWorkflowStep;
-            var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
+            var user = Employee.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
             var candidate = CandidateBuilder.Create(_fixture);
 
@@ -63,7 +63,7 @@
         public void Reject_ValidUser_ShouldChangeStatusToRejected()
         {
             var step = new StepBuilder().Create(typeof(CandidateWorkflowStep), (ISpecimenContext)_fixture) as CandidateWorkflowStep;
-            var user = Employers.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
+            var user = Employee.Create(_fixture.Create<Guid>(), _fixture.Create<string>());
 
             var candidate = CandidateBuilder.Create(_fixture);
 

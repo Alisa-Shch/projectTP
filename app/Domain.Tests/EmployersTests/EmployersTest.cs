@@ -16,7 +16,7 @@
         {
             var roleId = Guid.NewGuid();
             var name = _fixture.Create<string>();
-            var employer = Employers.Create(roleId, name);
+            var employer = Employee.Create(roleId, name);
 
             employer.Should().NotBeNull();
             employer.Id.Should().NotBeEmpty();
@@ -29,7 +29,7 @@
         {
             var name = _fixture.Create<string>();
 
-            Action act = () => Employers.Create(Guid.Empty, name);
+            Action act = () => Employee.Create(Guid.Empty, name);
 
             act.Should().Throw<ArgumentException>().WithMessage("*RoleID*");
         }
@@ -39,7 +39,7 @@
         {
             var roleId = Guid.NewGuid();
 
-            Action act = () => Employers.Create(roleId, null!);
+            Action act = () => Employee.Create(roleId, null!);
 
             act.Should().Throw<ArgumentException>().WithMessage("*name*");
         }
@@ -49,7 +49,7 @@
         {
             var roleId = Guid.NewGuid();
 
-            Action act = () => Employers.Create(roleId, string.Empty);
+            Action act = () => Employee.Create(roleId, string.Empty);
 
             act.Should().Throw<ArgumentException>().WithMessage("*name*");
         }

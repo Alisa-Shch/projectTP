@@ -2,8 +2,8 @@
 {
     public class Role
     {
-        public Guid Id { get; }
-        public string Name { get; }
+        public Guid Id { get; private set; }
+        public string Name { get; private set; }
 
         private Role(Guid id, string name)
         {

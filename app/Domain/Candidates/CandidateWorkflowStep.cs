@@ -2,55 +2,55 @@
 {
     public class CandidateWorkflowStep
     {
-        public Guid? EmployeeId { get; }
-        public Guid? RoleId { get; }
+        public Guid? EmployeeId { get; private set; }
+        public Guid? RoleId { get; private set; }
+        public int NumberStep { get; private set; }
         public string? Description { get; private set; }
-        public Status Status { get; private set; }
         public string? Comment { get; private set; }
         public DateTime ModifiedDate { get; private set; }
-        public int NumberStep { get; }
+        public Status Status { get; private set; }
 
-        private CandidateWorkflowStep(string description, Guid? employeeId, Guid? roleId, DateTime modifiedDate, int numberStep)
+        private CandidateWorkflowStep(Guid? employeeId, Guid? roleId, int numberStep, string description, DateTime modifiedDate)
         {
-            ArgumentException.ThrowIfNullOrEmpty(nameof(description));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(employeeId));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(roleId));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(modifiedDate));
+            ArgumentNullException.ThrowIfNull(nameof(employeeId));
+            ArgumentNullException.ThrowIfNull(nameof(roleId));
             ArgumentException.ThrowIfNullOrEmpty(nameof(numberStep));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(description));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(modifiedDate));
 
-            Status = Status.InProgress;
-            Description = description;
             EmployeeId = employeeId;
             RoleId = roleId;
-            ModifiedDate = modifiedDate;
             NumberStep = numberStep;
+            Description = description;
+            ModifiedDate = modifiedDate;
+            Status = Status.InProgress;
         }
 
         public static CandidateWorkflowStep Create(WorkflowTemplateStep templateStep)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(templateStep));
 
-            return new(templateStep.Description, templateStep.RoleId, templateStep.EmployeeId, DateTime.UtcNow, templateStep.NumberStep);
+            return new(templateStep.RoleId, templateStep.EmployeeId, templateStep.NumberStep, templateStep.Description, DateTime.UtcNow);
         }
 
-        internal void Approve(Employers user, string comment)
+        internal void Approve(Employee user, string comment)
         {
             ArgumentNullException.ThrowIfNull(nameof(user));
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
 
-            Check(user);
+            CheckUserAndStatus(user);
 
             Status = Status.Approved;
             Comment = comment;
             ModifiedDate = DateTime.UtcNow;
         }
 
-        internal void Reject(Employers user, string comment)
+        internal void Reject(Employee user, string comment)
         {
             ArgumentNullException.ThrowIfNull(nameof(user));
             ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
 
-            Check(user);
+            CheckUserAndStatus(user);
 
             Status = Status.Rejected;
             Comment = comment;
@@ -64,7 +64,7 @@
             ModifiedDate = DateTime.UtcNow;
         }
 
-        public void Check(Employers user)
+        public void CheckUserAndStatus(Employee user)
         {
             if (user.Id != EmployeeId)
             {

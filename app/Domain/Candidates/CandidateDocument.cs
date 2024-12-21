@@ -2,8 +2,8 @@
 {
     public class CandidateDocument
     {
-        public string Name { get; }
-        public string WorkExperience { get; }
+        public string Name { get; private set; }
+        public string WorkExperience { get; private set; }
 
         private CandidateDocument(string name, string workExperience)
         {
