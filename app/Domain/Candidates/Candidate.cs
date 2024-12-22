@@ -25,10 +25,22 @@
 
         public static Candidate Create(Guid vacancyId, Guid? referralId, CandidateDocument document, CandidateWorkflow workflow)
         {
-            ArgumentException.ThrowIfNullOrEmpty(nameof(vacancyId));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(referralId));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(document));
-            ArgumentNullException.ThrowIfNull(nameof(workflow));
+            if (vacancyId == Guid.Empty)
+            {
+                throw new ArgumentException("VacancyId cannot be empty", nameof(vacancyId));
+            }
+            if (referralId == Guid.Empty)
+            {
+                throw new ArgumentException("ReferralId cannot be empty", nameof(referralId));
+            }
+            if (document == null)
+            {
+                throw new ArgumentException("Document cannot be null", nameof(document));
+            }
+            if (workflow == null)
+            {
+                throw new ArgumentException("Workflow cannot be null", nameof(workflow));
+            }
 
             return new Candidate(Guid.NewGuid(), vacancyId, referralId, document, workflow);
         }

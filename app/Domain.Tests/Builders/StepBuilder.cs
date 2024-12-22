@@ -4,13 +4,13 @@
     {
         public object Create(object request, ISpecimenContext context)
         {
-            if (!typeof(CandidateWorkflowStep).Equals(request))
+            if (request is CandidateWorkflowStep)
             {
-                return new NoSpecimen();
-            }
-            var templateStep = WorkflowTemplateStep.Create(context.Create<string>(), context.Create<string>(), context.Create<Guid>(), context.Create<Guid>());
+                var templateStep = WorkflowTemplateStep.Create(context.Create<string>(), context.Create<string>(), context.Create<Guid>(), context.Create<Guid>());
 
-            return CandidateWorkflowStep.Create(templateStep);
+                return CandidateWorkflowStep.Create(templateStep);
+            }
+            return new NoSpecimen();
         }
     }
 }

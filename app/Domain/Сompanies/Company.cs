@@ -8,7 +8,7 @@
         private Company(Guid id, string name)
         {
             ArgumentException.ThrowIfNullOrEmpty(nameof(id));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
 
             Id = id;
             Name = name;
@@ -16,7 +16,7 @@
 
         public static Company Create(string name)
         {
-            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
 
             return new(Guid.NewGuid(), name);
         }

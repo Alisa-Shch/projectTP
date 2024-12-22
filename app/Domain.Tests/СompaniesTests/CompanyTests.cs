@@ -1,9 +1,9 @@
 ﻿namespace Domain.Tests
 {
     [TestFixture]
-    public class CompanyTest
+    public class CompanyTests
     {
-        private Fixture? _fixture;
+        private Fixture _fixture;
 
         [SetUp]
         public void Setup()
@@ -15,6 +15,7 @@
         public void Create_ValidName_ShouldCreateCompany()
         {
             var name = _fixture.Create<string>();
+
             var company = Company.Create(name);
 
             company.Should().NotBeNull();
@@ -23,18 +24,20 @@
         }
 
         [Test]
-        public void Create_NullName_ShouldThrowArgumentException()
+        public void Create_EmptyName_ShouldThrowArgumentException()
         {
-            Action act = () => Company.Create(null!);
+            string name = string.Empty;
 
+            Action act = () => Company.Create(name);
             act.Should().Throw<ArgumentException>().WithMessage("*name*");
         }
 
         [Test]
-        public void Create_EmptyName_ShouldThrowArgumentException()
+        public void Create_NullName_ShouldThrowArgumentException()
         {
-            Action act = () => Company.Create(string.Empty);
+            string name = null;
 
+            Action act = () => Company.Create(name);
             act.Should().Throw<ArgumentException>().WithMessage("*name*");
         }
     }

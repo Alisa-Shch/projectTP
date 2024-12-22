@@ -7,8 +7,8 @@
 
         private CandidateDocument(string name, string workExperience)
         {
-            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(workExperience));
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
+            ArgumentException.ThrowIfNullOrEmpty(workExperience, nameof(workExperience));
 
             Name = name;
             WorkExperience = workExperience;
@@ -16,8 +16,8 @@
 
         public static CandidateDocument Create(string name, string workExperience)
         {
-            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(workExperience));
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
+            ArgumentException.ThrowIfNullOrEmpty(workExperience, nameof(workExperience));
 
             return new(name, workExperience);
         }
