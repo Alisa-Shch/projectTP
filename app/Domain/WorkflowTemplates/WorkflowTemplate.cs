@@ -22,9 +22,12 @@
 
         public static WorkflowTemplate Create(string name, string description, IReadOnlyCollection<WorkflowTemplateStep> steps)
         {
-            ArgumentException.ThrowIfNullOrEmpty(nameof(name));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(description));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(steps));
+            if (steps == null)
+            {
+                throw new ArgumentException("Steps cannot be null", nameof(steps));
+            }
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
+            ArgumentException.ThrowIfNullOrEmpty(description, nameof(description));
 
             return new(Guid.NewGuid(), name, description, steps);
         }

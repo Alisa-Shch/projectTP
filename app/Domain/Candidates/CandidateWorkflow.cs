@@ -15,11 +15,14 @@
             Id = id;
             TemplateId = templateId;
             Steps = steps;
-        }
+        }        
 
         public static CandidateWorkflow Create(WorkflowTemplate template)
         {
-            ArgumentNullException.ThrowIfNull(nameof(template));
+            if (template == null)
+            {
+                throw new ArgumentException("Template cannot be null", nameof(template));
+            }
 
             return new(Guid.NewGuid(), template.Id, new List<CandidateWorkflowStep>(template.Steps.Select(CandidateWorkflowStep.Create)));
         }

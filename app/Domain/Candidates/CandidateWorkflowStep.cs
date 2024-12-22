@@ -28,7 +28,10 @@
 
         public static CandidateWorkflowStep Create(WorkflowTemplateStep templateStep)
         {
-            ArgumentException.ThrowIfNullOrEmpty(nameof(templateStep));
+            if (templateStep == null)
+            {
+                throw new ArgumentException("WorkflowTemplateStep cannot be null", nameof(templateStep));
+            }
 
             return new(templateStep.RoleId, templateStep.EmployeeId, templateStep.NumberStep, templateStep.Description, DateTime.UtcNow);
         }

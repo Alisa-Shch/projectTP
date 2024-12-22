@@ -1,12 +1,12 @@
 ﻿namespace Domain.Tests
 {
-    public class StepBuilder : ISpecimenBuilder
+    public class WorkflowStepBuilder : ISpecimenBuilder
     {
         public object Create(object request, ISpecimenContext context)
         {
             if (request is CandidateWorkflowStep)
             {
-                var templateStep = WorkflowTemplateStep.Create(context.Create<string>(), context.Create<string>(), context.Create<Guid>(), context.Create<Guid>());
+                var templateStep = context.Create<WorkflowTemplateStep>();
 
                 return CandidateWorkflowStep.Create(templateStep);
             }

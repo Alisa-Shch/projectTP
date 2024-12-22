@@ -9,8 +9,6 @@
         public void Setup()
         {
             _fixture = new Fixture();
-            _fixture.Customizations.Add(new WorkflowBuilder());
-            _fixture.Customizations.Add(new StepBuilder());
         }
 
         [Test]
@@ -18,8 +16,9 @@
         {
             var vacancyId = _fixture.Create<Guid>();
             var referralId = _fixture.Create<Guid>();
-            var document = CandidateDocument.Create(_fixture.Create<string>(), _fixture.Create<string>());
+            var document = _fixture.Create<CandidateDocument>();
             var workflow = _fixture.Create<CandidateWorkflow>();  
+
             var candidate = Candidate.Create(vacancyId, referralId, document, workflow);
 
             candidate.Should().NotBeNull();

@@ -6,8 +6,7 @@
         {
             if (request is CandidateWorkflow)
             {
-                var step = context.Create<CandidateWorkflowStep>();
-                var template = WorkflowTemplate.Create(context.Create<string>(), context.Create<string>(), (IReadOnlyCollection<WorkflowTemplateStep>)step);
+                var template = context.Create<WorkflowTemplate>();
 
                 return CandidateWorkflow.Create(template);
             }
