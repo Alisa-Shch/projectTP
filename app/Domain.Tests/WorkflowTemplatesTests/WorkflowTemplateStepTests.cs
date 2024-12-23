@@ -25,7 +25,8 @@
             workflowTemplateStep.Name.Should().Be(name);
             workflowTemplateStep.Description.Should().Be(description);
             workflowTemplateStep.EmployeeId.Should().Be(employeeId);
-            workflowTemplateStep.RoleId.Should().Be(roleId);
+            workflowTemplateStep.RoleId.Should().Be(roleId); 
+            workflowTemplateStep.NumberStep.Should().NotBe(0);
         }
 
         [Test]

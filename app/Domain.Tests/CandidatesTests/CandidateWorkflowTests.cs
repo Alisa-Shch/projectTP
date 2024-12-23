@@ -32,7 +32,5 @@
             Action act = () => CandidateWorkflow.Create(template);
             act.Should().Throw<ArgumentException>().WithMessage("*template*");
         }
-
-
     }
 }

@@ -19,6 +19,7 @@
             Description = description;
             EmployeeId = employeeId;
             RoleId = roleId;
+            NumberStep = 1;
         }
 
         public static WorkflowTemplateStep Create(string name, string description, Guid employeeId, Guid roleId)

@@ -76,5 +76,125 @@
             Action act = () => Candidate.Create(vacancyId, referralId, document, workflow);
             act.Should().Throw<ArgumentException>().WithMessage("*workflow*");
         }
+
+        [Test]
+        public void Approve_Valid_ShouldApproveCandidate()
+        {
+            var user = _fixture.Create<Employee>();
+            var comment = _fixture.Create<string>();
+
+            var candidate = _fixture.Create<Candidate>();
+
+            candidate.Approve(user, comment);
+
+            foreach (var step in candidate.Workflow.Steps)
+            {
+                step.Status.Should().Be(Status.Approved);
+                step.Comment.Should().Be(comment);
+            }
+        }
+
+        [Test]
+        public void Approve_NullUser_ShouldThrowArgumentException()
+        {
+            Employee user = null;
+            var comment = _fixture.Create<string>();
+
+            var candidate = _fixture.Create<Candidate>();                    
+
+            Action act = () => candidate.Approve(user, comment);
+            act.Should().Throw<ArgumentException>().WithMessage("*user*");
+        }
+
+        [Test]
+        public void Approve_NullComment_ShouldThrowArgumentException()
+        {
+            var user = _fixture.Create<Employee>();
+            string comment = null;
+
+            var candidate = _fixture.Create<Candidate>();
+
+            Action act = () => candidate.Approve(user, comment);
+            act.Should().Throw<ArgumentException>().WithMessage("*comment*");
+        }
+
+        [Test]
+        public void Approve_EmptyComment_ShouldThrowArgumentException()
+        {
+            var user = _fixture.Create<Employee>();
+            var comment = string.Empty;
+
+            var candidate = _fixture.Create<Candidate>();
+
+            Action act = () => candidate.Approve(user, comment);
+            act.Should().Throw<ArgumentException>().WithMessage("*comment*");
+        }
+
+        [Test]
+        public void Reject_Valid_ShouldRejectCandidate()
+        {
+            var user = _fixture.Create<Employee>();
+            var comment = _fixture.Create<string>();
+
+            var candidate = _fixture.Create<Candidate>();
+
+            candidate.Reject(user, comment);
+
+            foreach (var step in candidate.Workflow.Steps)
+            {
+                step.Status.Should().Be(Status.Rejected);
+                step.Comment.Should().Be(comment);
+            }
+        }
+
+        [Test]
+        public void Reject_NullUser_ShouldThrowArgumentException()
+        {
+            Employee user = null;
+            var comment = _fixture.Create<string>();
+
+            var candidate = _fixture.Create<Candidate>();
+
+            Action act = () => candidate.Reject(user, comment);
+            act.Should().Throw<ArgumentException>().WithMessage("*user*");
+        }
+
+        [Test]
+        public void Reject_NullComment_ShouldThrowArgumentException()
+        {
+            var user = _fixture.Create<Employee>();
+            string comment = null;
+
+            var candidate = _fixture.Create<Candidate>();
+
+            Action act = () => candidate.Reject(user, comment);
+            act.Should().Throw<ArgumentException>().WithMessage("*comment*");
+        }
+
+        [Test]
+        public void Reject_EmptyComment_ShouldThrowArgumentException()
+        {
+            var user = _fixture.Create<Employee>();
+            var comment = string.Empty;
+
+            var candidate = _fixture.Create<Candidate>();
+
+            Action act = () => candidate.Reject(user, comment);
+            act.Should().Throw<ArgumentException>().WithMessage("*comment*");
+        }
+
+        [Test]
+        public void Restart_Valid_ShouldRestartCandidate()
+        {
+            var candidate = _fixture.Create<Candidate>();
+
+            candidate.Restart();
+
+            foreach (var step in candidate.Workflow.Steps)
+            {
+                step.Status.Should().Be(Status.InProgress);
+                step.Comment.Should().Be(null);
+            }
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Domain
+﻿using System.Xml.Linq;
+
+namespace Domain
 {
     public class Candidate
     {
@@ -47,11 +49,23 @@
 
         public void Approve(Employee user, string comment)
         {
+            if (user == null)
+            {
+                throw new ArgumentException("User cannot be null", nameof(user));
+            }
+            ArgumentException.ThrowIfNullOrEmpty(comment, nameof(comment));
+
             Workflow.Approve(user, comment);
         }
 
         public void Reject(Employee user, string comment)
         {
+            if (user == null)
+            {
+                throw new ArgumentException("User cannot be null", nameof(user));
+            }
+            ArgumentException.ThrowIfNullOrEmpty(comment, nameof(comment));
+
             Workflow.Reject(user, comment);
         }
 

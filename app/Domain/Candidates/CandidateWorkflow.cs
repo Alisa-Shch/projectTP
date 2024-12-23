@@ -29,8 +29,11 @@
 
         internal void Approve(Employee user, string comment)
         {
-            ArgumentNullException.ThrowIfNull(nameof(user));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
+            if (user == null)
+            {
+                throw new ArgumentException("User cannot be null", nameof(user));
+            }
+            ArgumentException.ThrowIfNullOrEmpty(comment, nameof(comment));
 
             CheckStatus();
 
@@ -40,8 +43,11 @@
 
         internal void Reject(Employee user, string comment)
         {
-            ArgumentNullException.ThrowIfNull(nameof(user));
-            ArgumentException.ThrowIfNullOrEmpty(nameof(comment));
+            if (user == null)
+            {
+                throw new ArgumentException("User cannot be null", nameof(user));
+            }
+            ArgumentException.ThrowIfNullOrEmpty(comment, nameof(comment));
 
             CheckStatus();
 

@@ -30,7 +30,5 @@
             Action act = () => CandidateWorkflowStep.Create(templateStep);
             act.Should().Throw<ArgumentException>().WithMessage("*templateStep*");
         }
-
-
     }
 }

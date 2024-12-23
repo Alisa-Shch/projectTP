@@ -21,7 +21,7 @@
         {
             if (roleId == Guid.Empty)
             {
-                throw new ArgumentException("Role ID cannot be empty", nameof(roleId));
+                throw new ArgumentException("RoleId cannot be empty", nameof(roleId));
             }
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
 

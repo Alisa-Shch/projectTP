@@ -81,5 +81,18 @@
             Action act = () => WorkflowTemplate.Create(name, description, steps);
             act.Should().Throw<ArgumentException>().WithMessage("*steps*");
         }
+
+        [Test]
+        public void Create_ValidCandidateWorkflow_ShouldCreateWorkflowTemplate()
+        {
+            var workflowTemplate = _fixture.Create<WorkflowTemplate>();
+
+            var candidateWorkflow = workflowTemplate.Create();
+
+            candidateWorkflow.Should().NotBeNull();
+            candidateWorkflow.Id.Should().NotBeEmpty();
+            candidateWorkflow.TemplateId.Should().NotBeEmpty();
+            candidateWorkflow.Steps.Should().NotBeEmpty();
+        }
     }
 }
