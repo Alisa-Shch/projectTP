@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace Domain.Tests
+﻿namespace Domain.Tests
 {
     public class TemplateStepBuilder : ISpecimenBuilder
     {

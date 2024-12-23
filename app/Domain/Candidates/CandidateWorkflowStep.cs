@@ -33,7 +33,7 @@
                 throw new ArgumentException("WorkflowTemplateStep cannot be null", nameof(templateStep));
             }
 
-            return new(templateStep.RoleId, templateStep.EmployeeId, templateStep.NumberStep, templateStep.Description, DateTime.UtcNow);
+            return new(templateStep.EmployeeId, templateStep.RoleId, templateStep.NumberStep, templateStep.Description, DateTime.UtcNow);
         }
 
         internal void Approve(Employee user, string comment)

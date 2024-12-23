@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace Domain
+﻿namespace Domain
 {
     public class Candidate
     {
