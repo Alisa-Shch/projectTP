@@ -83,7 +83,24 @@
             var user = _fixture.Create<Employee>();
             var comment = _fixture.Create<string>();
 
-            var candidate = _fixture.Create<Candidate>();
+            var templateStep = WorkflowTemplateStep.Create(
+                name: _fixture.Create<string>(),
+                description: _fixture.Create<string>(),
+                employeeId: user.Id,
+                roleId: _fixture.Create<Guid>());
+
+            var template = WorkflowTemplate.Create(
+                name: _fixture.Create<string>(),
+                description: _fixture.Create<string>(),
+                steps: [templateStep]);
+
+            var workflow = CandidateWorkflow.Create(template);
+
+            var candidate = Candidate.Create(
+                vacancyId: _fixture.Create<Guid>(),
+                referralId: _fixture.Create<Guid>(),
+                document: _fixture.Create<CandidateDocument>(), 
+                workflow);
 
             candidate.Approve(user, comment);
 
@@ -136,7 +153,24 @@
             var user = _fixture.Create<Employee>();
             var comment = _fixture.Create<string>();
 
-            var candidate = _fixture.Create<Candidate>();
+            var templateStep = WorkflowTemplateStep.Create(
+                name: _fixture.Create<string>(),
+                description: _fixture.Create<string>(),
+                employeeId: user.Id,
+                roleId: _fixture.Create<Guid>());
+
+            var template = WorkflowTemplate.Create(
+                name: _fixture.Create<string>(),
+                description: _fixture.Create<string>(),
+                steps: [templateStep]);
+
+            var workflow = CandidateWorkflow.Create(template);
+
+            var candidate = Candidate.Create(
+                vacancyId: _fixture.Create<Guid>(),
+                referralId: _fixture.Create<Guid>(),
+                document: _fixture.Create<CandidateDocument>(),
+                workflow);
 
             candidate.Reject(user, comment);
 
