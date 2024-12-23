@@ -1,16 +1,19 @@
 ﻿namespace Domain.Tests
 {
-    public class CandidateBuilder
+    public class CandidateBuilder : ISpecimenBuilder
     {
-        public static Candidate Create(Fixture fixture)
+        public object Create(object request, ISpecimenContext context)
         {
-            var template = new TemplateBuilder().Create(typeof(WorkflowTemplate), (ISpecimenContext)fixture) as WorkflowTemplate;
-            var workflow = CandidateWorkflow.Create(template);
+            if (request is Candidate)
+            {
+                var vacancyId = context.Create<Guid>();
+                var referralId = context.Create<Guid>();
+                var document = context.Create<CandidateDocument>();
+                var workflow = context.Create<CandidateWorkflow>();
 
-            string name = fixture.Create<string>();
-            string workExperience = fixture.Create<string>();
-
-            return Candidate.Create(workflow, CandidateDocument.Create(name, workExperience));
+                return Candidate.Create(vacancyId, referralId, document, workflow);
+            }
+            return new NoSpecimen();
         }
     }
 }

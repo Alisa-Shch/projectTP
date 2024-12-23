@@ -1,18 +1,18 @@
 ﻿namespace Domain.Tests
 {
-    internal class TemplateBuilder : ISpecimenBuilder
+    public class TemplateBuilder : ISpecimenBuilder
     {
-        private Fixture _fixture = new();
-
         public object Create(object request, ISpecimenContext context)
         {
-            if (!typeof(WorkflowTemplate).Equals(request))
+            if (request is WorkflowTemplate)
             {
-                return new NoSpecimen();
-            }
-            var step = new StepBuilder().Create(typeof(CandidateWorkflowStep), (ISpecimenContext)_fixture);
+                var name = context.Create<string>();
+                var description = context.Create<string>();
+                var step = context.Create<IReadOnlyCollection<WorkflowTemplateStep>>();
 
-            return WorkflowTemplate.Create(context.Create<string>(), context.Create<string>(), (IReadOnlyCollection<WorkflowTemplateStep>)step);
+                return WorkflowTemplate.Create(name, description, step);
+            }
+            return new NoSpecimen();
         }
     }
 }
